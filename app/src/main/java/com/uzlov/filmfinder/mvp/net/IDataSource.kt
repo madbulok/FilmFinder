@@ -40,7 +40,7 @@ interface IDataSource {
         @Path("id") id: Int,
         @Query("api_key") apikey:String = Constants.API_KEY,
         @Query("language") language:String = "ru-RU",
-    ) : Call<Film>
+    ) : Single<Film>
 
     @GET("3/movie/{movie_id}/credits")
     fun getCreditsMoviesById(

@@ -10,18 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import com.uzlov.filmfinder.R
 import com.uzlov.filmfinder.app.App
 import com.uzlov.filmfinder.databinding.FragmentHomeBinding
 import com.uzlov.filmfinder.mvp.model.image.IImageLoader
 import com.uzlov.filmfinder.mvp.presenters.HomePresenter
 import com.uzlov.filmfinder.ui.adapters.FilmsAdapter
+import com.uzlov.filmfinder.ui.view.BackButtonListener
 import com.uzlov.filmfinder.ui.view.HomeView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
-class HomeFragment : MvpAppCompatFragment(), HomeView, SharedPreferences.OnSharedPreferenceChangeListener{
+class HomeFragment : MvpAppCompatFragment(), HomeView, SharedPreferences.OnSharedPreferenceChangeListener, BackButtonListener{
 
     private var enableAdult: Boolean = false
     private var _viewBinding: FragmentHomeBinding? = null
@@ -68,22 +68,17 @@ class HomeFragment : MvpAppCompatFragment(), HomeView, SharedPreferences.OnShare
 
         initListeners()
         PreferenceManager.getDefaultSharedPreferences(requireContext()).registerOnSharedPreferenceChangeListener(this)
-        viewBinding.nameFilmSearchTv.addTextChangedListener(textWatcher)
     }
 
     private fun initListeners() {
         with(viewBinding){
-
+            viewBinding.nameFilmSearchTv.addTextChangedListener(textWatcher)
         }
     }
 
-    fun onClick(position: Int, id: Int) {
-        parentFragmentManager.beginTransaction().run {
-            hide(this@HomeFragment)
-            add(R.id.fragment_container, FilmFragment.newInstance(id))
-            addToBackStack(null)
-            commit()
-        }
+    override fun backPressed(): Boolean {
+        homePresenter.backPressed()
+        return true
     }
 
     override fun onDestroyView() {
@@ -102,12 +97,12 @@ class HomeFragment : MvpAppCompatFragment(), HomeView, SharedPreferences.OnShare
 
     override fun init() {
         with(viewBinding){
-
             popularRV.adapter = FilmsAdapter(homePresenter.popularListPresenter, glideImageLoader)
             upcomingRV.adapter = FilmsAdapter(homePresenter.upcomingListPresenter, glideImageLoader)
             recommendRV.adapter = FilmsAdapter(homePresenter.topListPresenter, glideImageLoader)
         }
     }
+
 
     override fun loadPopularFilms() {
         with(viewBinding){

@@ -4,34 +4,40 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.uzlov.filmfinder.app.App
+import com.uzlov.filmfinder.app.Constants
 import com.uzlov.filmfinder.databinding.FragmentFilmBinding
 import com.uzlov.filmfinder.mvp.model.entity.Film
+import com.uzlov.filmfinder.mvp.presenters.FilmPresenter
+import com.uzlov.filmfinder.ui.view.BackButtonListener
+import com.uzlov.filmfinder.ui.view.FilmView
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class FilmFragment : Fragment() {
+class FilmFragment : MvpAppCompatFragment(), FilmView, BackButtonListener {
     private var _viewBinding: FragmentFilmBinding? = null
     private val viewBinding get() = _viewBinding!!
     private var isAddedFavorite = false
+    private var filmId: Int = -1
 
 
-    private var idFilm  = 0
-    private lateinit var film: Film
-
-    companion object {
-        fun newInstance(id: Int): FilmFragment {
-            val data = Bundle().apply {
-                putInt("film_key", id)
-            }
-            return FilmFragment().apply { arguments = data }
+    private val presenter by moxyPresenter {
+        filmId = arguments?.getInt(Constants.KEY_FILM_ENTITY) ?: -1
+        FilmPresenter(filmId).apply {
+            App.instance.appComponent.inject(this)
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        idFilm = arguments?.getInt("film_key") ?: 0
+    companion object {
+        fun newInstance(film: Int): FilmFragment {
+            val data = Bundle().apply {
+                putInt(Constants.KEY_FILM_ENTITY, film)
+            }
+            return FilmFragment().apply { arguments = data }
+        }
     }
 
     override fun onCreateView(
@@ -40,7 +46,7 @@ class FilmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _viewBinding = FragmentFilmBinding.inflate(layoutInflater, container, false)
-        return  viewBinding.root
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,9 +55,6 @@ class FilmFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             //addItemDecoration(MyItemDecorator(RecyclerView.HORIZONTAL), RecyclerView.HORIZONTAL)
         }
-
-
-        initListenerActionsFilm()
     }
 
     private fun initListenerActionsFilm() {
@@ -64,33 +67,26 @@ class FilmFragment : Fragment() {
                 }
             }
         }
+    }
 
-        viewBinding.shareBtn.setOnClickListener {
-//            val intent = Intent(requireContext(), ShareActivity::class.java)
-//            intent.apply {
-//                putExtra("key_name", film.title)
-//                putExtra("key_url", film.homepage)
-//            }
-//            startActivity(intent)
+    override fun init() {
+        initListenerActionsFilm()
+    }
+
+    override fun loadFilm(film: Film) {
+        with(viewBinding){
+            titleTv.text = film.title
         }
     }
 
-
-
-    private fun showLoading() {}
-
-    private fun showError(error: Throwable) {
-        Snackbar.make(viewBinding.root, error.message ?: "Empty error", Snackbar.LENGTH_SHORT).show()
+    override fun showError(message: String) {
+        Snackbar.make(viewBinding.root, message, Snackbar.LENGTH_SHORT).show()
     }
+
+    override fun backPressed(): Boolean = presenter.backButton()
 
     override fun onDestroyView() {
         super.onDestroyView()
         _viewBinding = null
     }
-
-
-}
-
-interface OpenMapListener {
-    fun open(id: Int)
 }

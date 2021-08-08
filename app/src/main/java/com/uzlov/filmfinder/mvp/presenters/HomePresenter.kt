@@ -1,7 +1,9 @@
 package com.uzlov.filmfinder.mvp.presenters
 
+import com.github.terrakok.cicerone.Router
 import com.uzlov.filmfinder.mvp.model.entity.Result
 import com.uzlov.filmfinder.mvp.model.repo.IFilmRepo
+import com.uzlov.filmfinder.mvp.navigation.IScreens
 import com.uzlov.filmfinder.mvp.presenters.list.IFilmsListPresenter
 import com.uzlov.filmfinder.ui.view.HomeView
 import com.uzlov.filmfinder.ui.view.list.FilmItemView
@@ -15,17 +17,20 @@ class HomePresenter : MvpPresenter<HomeView>() {
     @Inject  @field:Named("ui")
     lateinit var scheduler: Scheduler
 
-    class FilmsListPresenter : IFilmsListPresenter {
+    @Inject lateinit var router: Router
+    @Inject lateinit var screens: IScreens
+
+    inner class FilmsListPresenter : IFilmsListPresenter {
         val films = mutableListOf<Result>()
         override var itemClickListener: ((FilmItemView) -> Unit)? = null
-
         override fun getCount() = films.size
 
         override fun bindView(view: FilmItemView) {
-            val film = films[view.pos]
-            film.title.let { view.setTitle(it) }
-            film.getImageOriginal().let { view.loadPoster(it) }
-            view.setRating(film.vote_average.toFloat())
+            with(films[view.pos]){
+                title.let { view.setTitle(it) }
+                getImageOriginal().let { view.loadPoster(it) }
+                view.setRating(vote_average.toFloat())
+            }
         }
 
         fun clear() = films.clear()
@@ -54,8 +59,16 @@ class HomePresenter : MvpPresenter<HomeView>() {
         viewState.init()
 
         popularFilmsListPresenter.itemClickListener = { itemView ->
-            val film = popularFilmsListPresenter.films[itemView.pos]
-//            router.navigateTo(screens.user(film))
+            val film = popularFilmsListPresenter.films[itemView.pos].id
+            router.navigateTo(screens.openFilm(film))
+        }
+        topListPresenter.itemClickListener = { itemView ->
+            val film = topListPresenter.films[itemView.pos].id
+            router.navigateTo(screens.openFilm(film))
+        }
+        upcomingListPresenter.itemClickListener = { itemView ->
+            val film = upcomingListPresenter.films[itemView.pos].id
+            router.navigateTo(screens.openFilm(film))
         }
     }
 
@@ -87,7 +100,7 @@ class HomePresenter : MvpPresenter<HomeView>() {
     }
 
     fun backPressed(): Boolean {
-//        router.exit()
+        router.exit()
         return true
     }
 }

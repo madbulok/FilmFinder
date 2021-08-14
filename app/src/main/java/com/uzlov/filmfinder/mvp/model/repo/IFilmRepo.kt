@@ -1,5 +1,6 @@
 package com.uzlov.filmfinder.mvp.model.repo
 
+import com.uzlov.filmfinder.mvp.model.entity.Credits
 import com.uzlov.filmfinder.mvp.model.entity.Film
 import com.uzlov.filmfinder.mvp.model.entity.PopularFilms
 import io.reactivex.rxjava3.core.Single
@@ -9,4 +10,6 @@ interface IFilmRepo {
     fun loadUpcomingFilms(): Single<PopularFilms>
     fun loadTopRatedFilms(): Single<PopularFilms>
     fun loadFilmInformation(id: Int): Single<Film>
+
+    fun getCreditsMovieById(id: Int) : Single<Credits>
 }

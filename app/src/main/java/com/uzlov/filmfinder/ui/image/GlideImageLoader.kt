@@ -14,7 +14,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.ByteArrayOutputStream
 
 class GlideImageLoader(
-    val networkStatus: INetworkStatus,
+    private val networkStatus: INetworkStatus,
     val cache: IFilmCache
 ) : IImageLoader<ImageView> {
 

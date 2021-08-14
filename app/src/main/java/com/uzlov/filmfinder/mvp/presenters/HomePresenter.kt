@@ -6,7 +6,7 @@ import com.uzlov.filmfinder.mvp.model.repo.IFilmRepo
 import com.uzlov.filmfinder.mvp.navigation.IScreens
 import com.uzlov.filmfinder.mvp.presenters.list.IFilmsListPresenter
 import com.uzlov.filmfinder.ui.view.HomeView
-import com.uzlov.filmfinder.ui.view.list.FilmItemView
+import com.uzlov.filmfinder.ui.view.list.films.FilmItemView
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import javax.inject.Inject

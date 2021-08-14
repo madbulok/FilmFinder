@@ -58,7 +58,7 @@ class HostActivity :  MvpAppCompatActivity(), MainView {
             if (it is BackButtonListener && it.backPressed()){
                 return
             }
-            presenter.backClicked()
         }
+        presenter.backClicked()
     }
 }

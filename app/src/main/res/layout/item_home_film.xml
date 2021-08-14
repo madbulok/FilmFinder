@@ -27,8 +27,12 @@
 
     <RatingBar
         android:id="@+id/rateFilm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.RatingBar.Small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:numStars="5"
+        android:isIndicator="true"
+        android:layout_gravity="start"
+        android:backgroundTint="@color/purple_500"/>
 
 </LinearLayout>

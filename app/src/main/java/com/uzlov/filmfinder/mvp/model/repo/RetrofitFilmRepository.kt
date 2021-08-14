@@ -1,5 +1,6 @@
 package com.uzlov.filmfinder.mvp.model.repo
 
+import com.uzlov.filmfinder.mvp.model.entity.Credits
 import com.uzlov.filmfinder.mvp.model.entity.Film
 import com.uzlov.filmfinder.mvp.model.entity.PopularFilms
 import com.uzlov.filmfinder.mvp.net.IDataSource
@@ -46,6 +47,15 @@ class RetrofitFilmRepository(
                 api.getFilmById(id)
             } else {
                 api.getFilmById(id)
+            }
+        }
+
+    override fun getCreditsMovieById(id: Int): Single<Credits> =
+        networkStatus.isOnlineSingle().flatMap { isOnline ->
+            if (isOnline) {
+                api.getCreditsMoviesById(id)
+            } else {
+                api.getCreditsMoviesById(id)
             }
         }
 }

@@ -1,5 +1,6 @@
 package com.uzlov.filmfinder.di.modules
 
+import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -55,5 +56,5 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun networkStatus(app: App): INetworkStatus = AndroidNetworkStatus(app)
+    fun networkStatus(app: Context): INetworkStatus = AndroidNetworkStatus(app)
 }

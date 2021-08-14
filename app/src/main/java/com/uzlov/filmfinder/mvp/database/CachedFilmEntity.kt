@@ -1,14 +1,15 @@
-package com.uzlov.moviefind.database
+package com.uzlov.filmfinder.mvp.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class FilmEntityDB(
+data class CachedFilmEntity(
     @PrimaryKey val id : Long,
     val title : String,
     val picture : String,
     val rating : Float,
-    val description : String,
-    val favorite: Boolean = false
-)
+    val description : String
+) {
+
+}

@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class RetrofitFilmRepository(
     val api: IDataSource,
     private val networkStatus: INetworkStatus,
-    val cache: IFilmCache
+    val cache: IPictureCache
 ) : IFilmRepo {
 
     override fun loadPopularFilms(): Single<PopularFilms> =

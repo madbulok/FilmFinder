@@ -1,6 +1,7 @@
 package com.uzlov.filmfinder.di.modules.components
 
 import com.uzlov.filmfinder.di.modules.*
+import com.uzlov.filmfinder.mvp.model.repo.ImageCacheImpl
 import com.uzlov.filmfinder.mvp.presenters.FilmPresenter
 import com.uzlov.filmfinder.mvp.presenters.HomePresenter
 import com.uzlov.filmfinder.mvp.presenters.MainPresenter
@@ -19,6 +20,7 @@ import javax.inject.Singleton
         CiceroneModule::class,
         ApiModule::class,
         RepoModule::class,
+        CacheModule::class,
         SchedulersModule::class
     ]
 )
@@ -31,4 +33,5 @@ interface AppComponent {
     fun inject(filmFragment: FilmFragment)
     fun inject(filmPresenter: FilmPresenter)
     fun inject(companion: FilmFragment.Companion)
+    fun inject(imageCacheImpl: ImageCacheImpl)
 }

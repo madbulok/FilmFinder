@@ -1,13 +1,13 @@
 package com.uzlov.filmfinder.di.modules
 
-import com.uzlov.filmfinder.app.App
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 
 @Module
-class AppModule(val app: App) {
+class AppModule(val app: Context) {
 
     @Provides
-    fun app(): App = app
+    fun app(): Context = app
 
 }

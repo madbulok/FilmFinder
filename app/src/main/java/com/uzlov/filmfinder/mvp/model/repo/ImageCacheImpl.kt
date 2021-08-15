@@ -1,8 +1,8 @@
 package com.uzlov.filmfinder.mvp.model.repo
 
 import com.uzlov.filmfinder.app.App
-import com.uzlov.filmfinder.mvp.database.LocalDatabase
-import com.uzlov.filmfinder.mvp.database.RoomCachedImage
+import com.uzlov.filmfinder.mvp.cache.room.LocalDatabase
+import com.uzlov.filmfinder.mvp.cache.room.entity.RoomCachedImage
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class ImageCacheImpl(private val dir: File)  : IPictureCache {
     @Inject
-    lateinit var db:LocalDatabase
+    lateinit var db: LocalDatabase
 
     init {
         App.instance.appComponent.inject(this)
@@ -24,7 +24,7 @@ class ImageCacheImpl(private val dir: File)  : IPictureCache {
     private fun String.md5() = hash("MD5")
     private fun String.hash(algorithm: String) = MessageDigest.getInstance(algorithm).digest(toByteArray()).fold("", { _, it -> "%02x".format(it) })
 
-    override fun getBytes(url: String) = Maybe.fromCallable {
+    override fun getBytes(url: String): Maybe<ByteArray?> = Maybe.fromCallable {
         db.imageDao.findByUrl(url)?.let {
             File(it.localPath).inputStream().readBytes()
         }

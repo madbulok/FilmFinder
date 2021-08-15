@@ -1,25 +1,53 @@
 package com.uzlov.filmfinder.mvp.model.repo
 
+import com.uzlov.filmfinder.mvp.cache.room.IFilmCache
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedPopularFilm
 import com.uzlov.filmfinder.mvp.model.entity.Credits
 import com.uzlov.filmfinder.mvp.model.entity.Film
 import com.uzlov.filmfinder.mvp.model.entity.PopularFilms
+import com.uzlov.filmfinder.mvp.model.entity.Result
 import com.uzlov.filmfinder.mvp.net.IDataSource
 import com.uzlov.filmfinder.mvp.net.INetworkStatus
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class RetrofitFilmRepository(
-    val api: IDataSource,
+    private val api: IDataSource,
     private val networkStatus: INetworkStatus,
-    val cache: IPictureCache
+    val cache: IFilmCache
 ) : IFilmRepo {
 
     override fun loadPopularFilms(): Single<PopularFilms> =
         networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
-                api.getPopularFilms()
+                api.getPopularFilms().flatMap { popularFilms ->
+                    val cachedFilms = mutableListOf<CachedPopularFilm>()
+                    popularFilms.results.forEach { result ->
+                        cachedFilms.add(
+                            CachedPopularFilm(
+                                id = result.id,
+                                title = result.title,
+                                picture = result.getImageOriginal(),
+                                rating = result.vote_average.toFloat(),
+                                description = result.overview
+                            )
+                        )
+                    }
+                    cache.putPopularFilms(cachedFilms).toSingleDefault(popularFilms)
+                }
             } else {
-                api.getPopularFilms()
+                val popularFilms = PopularFilms(0, mutableListOf(), 0, 0)
+                val observable: Observable<List<CachedPopularFilm>> =
+                    cache.getPopularFilms().toObservable()
+
+                observable.flatMap { list ->
+                    Observable.fromIterable(list)
+                        .map { item ->
+                            popularFilms.results.add(Result().convertFromCache(item))
+                        }
+                }.blockingSubscribe()
+                return@flatMap Single.just(popularFilms)
             }
         }.subscribeOn(Schedulers.io())
 

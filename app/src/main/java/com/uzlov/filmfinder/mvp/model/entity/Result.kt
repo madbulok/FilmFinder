@@ -1,22 +1,23 @@
 package com.uzlov.filmfinder.mvp.model.entity
 
-import androidx.recyclerview.widget.DiffUtil
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedBaseEntity
+
 
 data class Result(
-    val adult: Boolean,
-    val backdrop_path: String,
-    val genre_ids: List<Int>,
-    val id: Int,
-    val original_language: String,
-    val original_title: String,
-    val overview: String,
-    val popularity: Double,
-    val poster_path: String,
-    val release_date: String,
-    val title: String,
-    val video: Boolean,
-    val vote_average: Double,
-    val vote_count: Int
+    var adult: Boolean = false,
+    var backdrop_path: String = "",
+    var genre_ids: List<Int> = emptyList(),
+    var id: Int = 0,
+    var original_language: String = "eng",
+    var original_title: String = "",
+    var overview: String = "",
+    var popularity: Double = 0.0,
+    var poster_path: String = "",
+    var release_date: String = "",
+    var title: String = "",
+    var video: Boolean = false,
+    var vote_average: Double = 0.0,
+    var vote_count: Int = 0
 ) {
     fun getImage50(): String {
         return "https://image.tmdb.org/t/p/w500$poster_path"
@@ -26,15 +27,12 @@ data class Result(
         return "https://image.tmdb.org/t/p/original$poster_path"
     }
 
-    companion object {
-        val callback: DiffUtil.ItemCallback<Result> = object : DiffUtil.ItemCallback<Result>() {
-            override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
-                return oldItem == newItem
-            }
-        }
+    fun convertFromCache(film: CachedBaseEntity) : Result{
+        id = film.id
+        title = film.title
+        vote_count =  film.rating.toInt()
+        poster_path = film.picture
+        overview = film.description
+        return this
     }
 }

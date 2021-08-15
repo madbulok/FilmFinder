@@ -1,4 +1,4 @@
-package com.uzlov.filmfinder.mvp.database
+package com.uzlov.filmfinder.mvp.cache.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

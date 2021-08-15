@@ -2,6 +2,7 @@ package com.uzlov.filmfinder.di.modules
 
 import android.widget.ImageView
 import com.uzlov.filmfinder.app.App
+import com.uzlov.filmfinder.mvp.cache.room.IFilmCache
 import com.uzlov.filmfinder.mvp.model.image.IImageLoader
 import com.uzlov.filmfinder.mvp.model.repo.IFilmRepo
 import com.uzlov.filmfinder.mvp.model.repo.IPictureCache
@@ -23,7 +24,7 @@ class RepoModule {
     fun usersRepo(
         api: IDataSource,
         networkStatus: INetworkStatus,
-        cache: IPictureCache
+        cache: IFilmCache
     ): IFilmRepo =
         RetrofitFilmRepository(api, networkStatus, cache)
 
@@ -33,7 +34,7 @@ class RepoModule {
 
     @Singleton
     @Provides
-    fun cacheFilms(dir: File = defaultPath()) : IPictureCache = ImageCacheImpl(dir)
+    fun iPictureCache(dir: File = defaultPath()) : IPictureCache = ImageCacheImpl(dir)
 
     @Singleton
     @Provides

@@ -1,6 +1,7 @@
-package com.uzlov.filmfinder.mvp.database
+package com.uzlov.filmfinder.mvp.cache.room.dao
 
 import androidx.room.*
+import com.uzlov.filmfinder.mvp.cache.room.entity.RoomCachedImage
 
 @Dao
 interface ImageDao {

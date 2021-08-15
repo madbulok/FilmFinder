@@ -2,6 +2,8 @@ package com.uzlov.filmfinder.mvp.model.repo
 
 import com.uzlov.filmfinder.mvp.cache.room.IFilmCache
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedPopularFilm
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedTopFilm
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedUpcomingFilm
 import com.uzlov.filmfinder.mvp.model.entity.Credits
 import com.uzlov.filmfinder.mvp.model.entity.Film
 import com.uzlov.filmfinder.mvp.model.entity.PopularFilms
@@ -51,21 +53,72 @@ class RetrofitFilmRepository(
             }
         }.subscribeOn(Schedulers.io())
 
-    override fun loadUpcomingFilms(): Single<PopularFilms> =
-        networkStatus.isOnlineSingle().flatMap { isOnline ->
+
+    override fun loadUpcomingFilms(): Single<PopularFilms> {
+        return networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
-                api.getUpcomingFilms()
+                api.getUpcomingFilms().flatMap { films ->
+                    val cachedFilms = mutableListOf<CachedUpcomingFilm>()
+                    films.results.forEach { result ->
+                        cachedFilms.add(
+                            CachedUpcomingFilm(
+                                id = result.id,
+                                title = result.title,
+                                picture = result.poster_path,
+                                rating = result.vote_average.toFloat(),
+                                description = result.overview
+                            )
+                        )
+                    }
+                    cache.putUpcomingFilms(cachedFilms).toSingleDefault(films)
+                }
             } else {
-                api.getUpcomingFilms()
+                val popularFilms = PopularFilms(0, mutableListOf(), 0, 0)
+                val observable: Observable<List<CachedUpcomingFilm>> =
+                    cache.getUpcomingFilms().toObservable()
+
+                observable.flatMap { list ->
+                    Observable.fromIterable(list)
+                        .map { item ->
+                            popularFilms.results.add(Result().convertFromCache(item))
+                        }
+                }.blockingSubscribe()
+                return@flatMap Single.just(popularFilms)
             }
         }.subscribeOn(Schedulers.io())
+    }
+
 
     override fun loadTopRatedFilms(): Single<PopularFilms> =
         networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
-                api.getTopFilms()
+                api.getTopFilms().flatMap { films ->
+                    val cachedFilms = mutableListOf<CachedTopFilm>()
+                    films.results.forEach { result ->
+                        cachedFilms.add(
+                            CachedTopFilm(
+                                id = result.id,
+                                title = result.title,
+                                picture = result.poster_path,
+                                rating = result.vote_average.toFloat(),
+                                description = result.overview
+                            )
+                        )
+                    }
+                    cache.putTopFilms(cachedFilms).toSingleDefault(films)
+                }
             } else {
-                api.getTopFilms()
+                val popularFilms = PopularFilms(0, mutableListOf(), 0, 0)
+                val observable: Observable<List<CachedTopFilm>> =
+                    cache.getTopFilms().toObservable()
+
+                observable.flatMap { list ->
+                    Observable.fromIterable(list)
+                        .map { item ->
+                            popularFilms.results.add(Result().convertFromCache(item))
+                        }
+                }.blockingSubscribe()
+                return@flatMap Single.just(popularFilms)
             }
         }.subscribeOn(Schedulers.io())
 

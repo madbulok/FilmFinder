@@ -28,7 +28,7 @@ class RetrofitFilmRepository(
                             CachedPopularFilm(
                                 id = result.id,
                                 title = result.title,
-                                picture = result.getImageOriginal(),
+                                picture = result.poster_path,
                                 rating = result.vote_average.toFloat(),
                                 description = result.overview
                             )

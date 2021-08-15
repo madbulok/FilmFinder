@@ -1,5 +1,6 @@
 package com.uzlov.filmfinder.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -26,6 +27,7 @@ class FilmsAdapter(private val presenter: IFilmsListPresenter, val imageLoader: 
         }
 
         override fun loadPoster(url: String) {
+            Log.e("LOAD", url)
             imageLoader.loadInto(url, vb.iamgeFilm)
         }
 

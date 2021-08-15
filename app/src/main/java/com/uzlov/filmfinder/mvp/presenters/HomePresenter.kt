@@ -1,5 +1,6 @@
 package com.uzlov.filmfinder.mvp.presenters
 
+import android.util.Log
 import com.github.terrakok.cicerone.Router
 import com.uzlov.filmfinder.mvp.model.entity.Result
 import com.uzlov.filmfinder.mvp.model.repo.IFilmRepo
@@ -28,7 +29,8 @@ class HomePresenter : MvpPresenter<HomeView>() {
         override fun bindView(view: FilmItemView) {
             with(films[view.pos]){
                 title.let { view.setTitle(it) }
-                getImageOriginal().let { view.loadPoster(it) }
+                Log.e("bind", getImageOriginal())
+                view.loadPoster(getImageOriginal())
                 view.setRating(vote_average.toFloat())
             }
         }

@@ -1,5 +1,6 @@
 package com.uzlov.filmfinder.mvp.model.repo
 
+import android.util.Log
 import com.uzlov.filmfinder.app.App
 import com.uzlov.filmfinder.mvp.cache.room.LocalDatabase
 import com.uzlov.filmfinder.mvp.cache.room.entity.RoomCachedImage
@@ -46,6 +47,7 @@ class ImageCacheImpl(private val dir: File)  : IPictureCache {
             emitter.onError(e)
         }
         db.imageDao.insert(RoomCachedImage(url, imageFile.path))
+        Log.e("URL SAVE", url)
         emitter.onComplete()
     }.subscribeOn(Schedulers.io())
 

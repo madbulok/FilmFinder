@@ -7,7 +7,6 @@ import com.uzlov.filmfinder.mvp.cache.room.IFilmCache
 import com.uzlov.filmfinder.mvp.cache.room.LocalDatabase
 import dagger.Module
 import dagger.Provides
-import io.reactivex.rxjava3.core.Scheduler
 import javax.inject.Singleton
 
 @Module

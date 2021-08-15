@@ -31,6 +31,7 @@ class RepoModule {
 
     @Provides
     fun defaultPath() : File = App.instance.cacheDir
+//    /data/data/com.uzlov.filmfinder/cache/02.jpg
 
     @Singleton
     @Provides

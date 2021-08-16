@@ -4,7 +4,7 @@ open class CachedBaseEntity(
     open val id: Int,
     open val title: String,
     open val picture: String,
-    open val rating: Float,
+    open val rating: Double,
     open val description: String
 ){
     fun getImage50(): String {

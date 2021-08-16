@@ -2,7 +2,6 @@ package com.uzlov.filmfinder.mvp.model.entity
 
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedBaseEntity
 
-
 data class Result(
     var adult: Boolean = false,
     var backdrop_path: String = "",
@@ -19,18 +18,13 @@ data class Result(
     var vote_average: Double = 0.0,
     var vote_count: Int = 0
 ) {
-    fun getImage50(): String {
-        return "https://image.tmdb.org/t/p/w500$poster_path"
-    }
+    val image50: String get() = "https://image.tmdb.org/t/p/w500$poster_path"
+    val imageOriginal: String get() = "https://image.tmdb.org/t/p/original$poster_path"
 
-    fun getImageOriginal(): String {
-        return "https://image.tmdb.org/t/p/original$poster_path"
-    }
-
-    fun convertFromCache(film: CachedBaseEntity) : Result{
+    fun convertFromCache(film: CachedBaseEntity): Result {
         id = film.id
         title = film.title
-        vote_count =  film.rating.toInt()
+        vote_average = film.rating
         poster_path = film.picture
         overview = film.description
         return this

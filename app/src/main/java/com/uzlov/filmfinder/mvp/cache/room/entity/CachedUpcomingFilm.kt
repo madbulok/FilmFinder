@@ -8,6 +8,6 @@ data class CachedUpcomingFilm(
     @PrimaryKey override val id: Int,
     override val title: String,
     override val picture: String,
-    override val rating: Float,
+    override val rating: Double,
     override val description: String
 ): CachedBaseEntity(id, title, picture, rating, description)

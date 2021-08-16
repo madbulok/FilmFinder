@@ -31,7 +31,7 @@ class RetrofitFilmRepository(
                                 id = result.id,
                                 title = result.title,
                                 picture = result.poster_path,
-                                rating = result.vote_average.toFloat(),
+                                rating = result.vote_average,
                                 description = result.overview
                             )
                         )
@@ -65,7 +65,7 @@ class RetrofitFilmRepository(
                                 id = result.id,
                                 title = result.title,
                                 picture = result.poster_path,
-                                rating = result.vote_average.toFloat(),
+                                rating = result.vote_average,
                                 description = result.overview
                             )
                         )
@@ -100,7 +100,7 @@ class RetrofitFilmRepository(
                                 id = result.id,
                                 title = result.title,
                                 picture = result.poster_path,
-                                rating = result.vote_average.toFloat(),
+                                rating = result.vote_average,
                                 description = result.overview
                             )
                         )

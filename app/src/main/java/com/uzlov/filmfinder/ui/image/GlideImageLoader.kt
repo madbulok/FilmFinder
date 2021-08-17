@@ -1,7 +1,6 @@
 package com.uzlov.filmfinder.ui.image
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -55,12 +54,11 @@ class GlideImageLoader(
                         .into(container)
                 } else {
                     cache.getBytes(url).observeOn(AndroidSchedulers.mainThread()).subscribe({
-                        Log.e("SIZE", it?.size.toString())
                         Glide.with(container.context)
                             .load(it)
                             .into(container)
                     }, {
-                        Log.e("ERROR", it.message.toString())
+                        it.printStackTrace()
                     })
                 }
             }

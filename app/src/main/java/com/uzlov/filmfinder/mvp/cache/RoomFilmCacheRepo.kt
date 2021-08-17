@@ -24,8 +24,8 @@ class RoomFilmCacheRepo(
         return db.filmDAO.saveUpcomingFilms(upcomingFilms).subscribeOn(Schedulers.io())
     }
 
-    override fun getUpcomingFilmsById(id: Int): Single<CachedUpcomingFilm> {
-        return db.filmDAO.getCachedUpcomingFilmById(id.toLong()).subscribeOn(Schedulers.io())
+    override fun getCachedUpcomingFilm(id: Int): Single<CachedUpcomingFilm?> {
+        return db.filmDAO.getCachedUpcomingFilmById(id)
     }
 
     // for top films
@@ -38,9 +38,10 @@ class RoomFilmCacheRepo(
         return db.filmDAO.saveTopFilms(upcomingFilms).subscribeOn(Schedulers.io())
     }
 
-    override fun getTopFilmsById(id: Int): Single<CachedTopFilm> {
-        return db.filmDAO.getCachedTopFilmById(id.toLong()).subscribeOn(Schedulers.io())
+    override fun getCachedTopFilm(id: Int): Single<CachedTopFilm?> {
+        return db.filmDAO.getCachedTopFilmById(id)
     }
+
 
     // for popular films
     override fun getPopularFilms(): Single<List<CachedPopularFilm>> {
@@ -52,7 +53,7 @@ class RoomFilmCacheRepo(
         return db.filmDAO.savePopularFilms(upcomingFilms).subscribeOn(Schedulers.io())
     }
 
-    override fun getPopularFilmsById(id: Int): Single<CachedPopularFilm> {
-        return db.filmDAO.getCachedPopularFilmById(id.toLong()).subscribeOn(Schedulers.io())
+    override fun getCachedPopularFilm(id: Int): Single<CachedPopularFilm?> {
+        return db.filmDAO.getCachedPopularFilmById(id)
     }
 }

@@ -7,12 +7,7 @@ open class CachedBaseEntity(
     open val rating: Double,
     open val description: String
 ){
-    fun getImage50(): String {
-        return "https://image.tmdb.org/t/p/w500$picture"
-    }
-
-    fun getImageOriginal(): String {
-        return "https://image.tmdb.org/t/p/original$picture"
-    }
+    val image50: String get() = "https://image.tmdb.org/t/p/w500$picture"
+    val imageOriginal: String get() = "https://image.tmdb.org/t/p/original$picture"
 
 }

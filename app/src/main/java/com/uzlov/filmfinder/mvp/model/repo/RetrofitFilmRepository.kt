@@ -1,6 +1,8 @@
 package com.uzlov.filmfinder.mvp.model.repo
 
+import android.util.Log
 import com.uzlov.filmfinder.mvp.cache.room.IFilmCache
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedBaseEntity
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedPopularFilm
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedTopFilm
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedUpcomingFilm
@@ -13,6 +15,7 @@ import com.uzlov.filmfinder.mvp.net.INetworkStatus
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.SingleSubject
 
 class RetrofitFilmRepository(
     private val api: IDataSource,
@@ -122,14 +125,56 @@ class RetrofitFilmRepository(
             }
         }.subscribeOn(Schedulers.io())
 
-    override fun loadFilmInformation(id: Int): Single<Film> =
-        networkStatus.isOnlineSingle().flatMap { isOnline ->
+
+    override fun loadCachedFilmInformation(id: Int):  Single<Film?> {
+        return networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
                 api.getFilmById(id)
             } else {
-                api.getFilmById(id)
+                val singleResult: SingleSubject<Film> = SingleSubject.create()
+
+                cache.getCachedTopFilm(id).flatMap {
+                    Single.just(it).map {c->
+                        if (c != null) {
+                            val f = Film.convertFromOther(c)
+                            singleResult.onSuccess(f)
+                        }
+                    }
+                }.blockingSubscribe({
+
+                },{
+
+                })
+                cache.getCachedPopularFilm(id).flatMap {
+                    Single.just(it).map {c->
+                        if (c != null) {
+                            val f = Film.convertFromOther(c)
+                            singleResult.onSuccess(f)
+                        }
+                    }
+                }.blockingSubscribe({
+
+                },{
+
+                })
+
+                cache.getCachedUpcomingFilm(id).flatMap {
+                    Single.just(it).map {c->
+                        if (c != null) {
+                            val f = Film.convertFromOther(c)
+                            singleResult.onSuccess(f)
+                        }
+                    }
+                }.blockingSubscribe({
+
+                },{
+
+                })
+                return@flatMap singleResult
             }
-        }
+        }.subscribeOn(Schedulers.io())
+    }
+
 
     override fun getCreditsMovieById(id: Int): Single<Credits> =
         networkStatus.isOnlineSingle().flatMap { isOnline ->

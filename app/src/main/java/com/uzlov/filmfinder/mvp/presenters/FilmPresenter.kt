@@ -2,13 +2,10 @@ package com.uzlov.filmfinder.mvp.presenters
 
 import com.github.terrakok.cicerone.Router
 import com.uzlov.filmfinder.mvp.model.entity.Cast
-import com.uzlov.filmfinder.mvp.model.entity.Credits
 import com.uzlov.filmfinder.mvp.model.repo.IFilmRepo
 import com.uzlov.filmfinder.mvp.presenters.list.IActorListPresenter
-import com.uzlov.filmfinder.mvp.presenters.list.IFilmsListPresenter
 import com.uzlov.filmfinder.ui.view.FilmView
 import com.uzlov.filmfinder.ui.view.list.actors.IActorItemView
-import com.uzlov.filmfinder.ui.view.list.films.FilmItemView
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import javax.inject.Inject
@@ -52,8 +49,6 @@ class FilmPresenter(val film: Int) : MvpPresenter<FilmView>() {
 
     val actorsPresenter get() = actorsListPresenter
 
-    fun String.toLinedText() = replace(" ", System.getProperty("line.separator") ?: "\n")
-
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
@@ -61,10 +56,10 @@ class FilmPresenter(val film: Int) : MvpPresenter<FilmView>() {
     }
 
     private fun loadingFilm() {
-        repo.loadFilmInformation(film)
+        repo.loadCachedFilmInformation(film)
             .observeOn(uiScheduler)
             .subscribe({
-                viewState.loadFilm(it)
+                if (it != null) viewState.loadFilm(it)
             }, {
                 viewState.showError(it.message ?: "Unknown error!")
             })
@@ -83,4 +78,6 @@ class FilmPresenter(val film: Int) : MvpPresenter<FilmView>() {
         router.exit()
         return true
     }
+
+    fun String.toLinedText() = replace(" ", System.getProperty("line.separator") ?: "\n")
 }

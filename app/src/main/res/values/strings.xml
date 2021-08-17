@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieFind</string>
+    <string name="app_name">FilmFind</string>
     <string name="action_settings">Настройки</string>
 
 
@@ -110,7 +110,7 @@
     <string name="text_success_loaded">Загружено!</string>
     <string name="text_ok">Ок</string>
     <string name="text_more">Ещё…</string>
-    <string name="recommend_label">Рекомендуем</string>
+    <string name="recommend_label">TOP</string>
     <string name="open_settings_label">Открыть настройки</string>
     <string name="maybe_error_with_network">Кажется проблемы с сетью…</string>
     <string name="funny_string">Кек! Работает!</string>

@@ -97,9 +97,9 @@ class HomeFragment : MvpAppCompatFragment(), HomeView, SharedPreferences.OnShare
 
     override fun init() {
         with(viewBinding){
+            topRatedRV.adapter = FilmsAdapter(homePresenter.topListPresenter, glideImageLoader)
             popularRV.adapter = FilmsAdapter(homePresenter.popularListPresenter, glideImageLoader)
             upcomingRV.adapter = FilmsAdapter(homePresenter.upcomingListPresenter, glideImageLoader)
-            recommendRV.adapter = FilmsAdapter(homePresenter.topListPresenter, glideImageLoader)
         }
     }
 
@@ -112,7 +112,7 @@ class HomeFragment : MvpAppCompatFragment(), HomeView, SharedPreferences.OnShare
 
     override fun loadTopFilms() {
         with(viewBinding){
-            recommendRV.adapter?.notifyDataSetChanged()
+            topRatedRV.adapter?.notifyDataSetChanged()
         }
     }
 

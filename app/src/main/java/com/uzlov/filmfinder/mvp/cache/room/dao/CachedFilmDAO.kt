@@ -1,11 +1,9 @@
 package com.uzlov.filmfinder.mvp.cache.room.dao
 
 import androidx.room.*
-import com.uzlov.filmfinder.mvp.cache.room.entity.CachedPopularFilm
-import com.uzlov.filmfinder.mvp.cache.room.entity.CachedTopFilm
-import com.uzlov.filmfinder.mvp.cache.room.entity.CachedUpcomingFilm
-import com.uzlov.filmfinder.mvp.cache.room.entity.FilmFavoriteEntity
+import com.uzlov.filmfinder.mvp.cache.room.entity.*
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 
 @Dao
@@ -15,25 +13,22 @@ interface CachedFilmDAO {
     @Query("SELECT * FROM CachedUpcomingFilm")
     fun getCachedUpcomingFilms() : Single<List<CachedUpcomingFilm>>
 
-    @Query("SELECT * FROM CachedUpcomingFilm WHERE id=:id")
-    fun getCachedUpcomingFilmById(id : Long) : Single<CachedUpcomingFilm>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveUpcomingFilms(vararg users: CachedUpcomingFilm)  : Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveUpcomingFilms(users: CachedUpcomingFilm)  : Completable
+    fun saveUpcomingFilms(users: CachedUpcomingFilm) : Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveUpcomingFilms(users: List<CachedUpcomingFilm>) : Completable
+
+    @Query("SELECT * FROM CachedUpcomingFilm WHERE id=:id ")
+    fun getCachedUpcomingFilmById(id: Int) : Single<CachedUpcomingFilm?>
 
 
     // cached TOP films
     @Query("SELECT * FROM CachedTopFilm")
     fun getCachedTopFilms() : Single<List<CachedTopFilm>>
-
-    @Query("SELECT * FROM CachedTopFilm WHERE id=:id")
-    fun getCachedTopFilmById(id : Long) : Single<CachedTopFilm>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveTopFilms(vararg users: CachedTopFilm)  : Completable
@@ -44,13 +39,13 @@ interface CachedFilmDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveTopFilms(users: List<CachedTopFilm>) : Completable
 
+    @Query("SELECT * FROM CachedTopFilm WHERE id=:id")
+    fun getCachedTopFilmById(id: Int) : Single<CachedTopFilm?>
+
 
     // cached POPULAR films
     @Query("SELECT * FROM CachedPopularFilm")
     fun getCachedPopularFilms() : Single<List<CachedPopularFilm>>
-
-    @Query("SELECT * FROM CachedTopFilm WHERE id=:id")
-    fun getCachedPopularFilmById(id : Long) : Single<CachedPopularFilm>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun savePopularFilms(vararg users: CachedPopularFilm)  : Completable
@@ -61,6 +56,8 @@ interface CachedFilmDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun savePopularFilms(users: List<CachedPopularFilm>) : Completable
 
+    @Query("SELECT * FROM CachedPopularFilm WHERE id=:id")
+    fun getCachedPopularFilmById(id: Int) : Single<CachedPopularFilm?>
 
 
     // other method's

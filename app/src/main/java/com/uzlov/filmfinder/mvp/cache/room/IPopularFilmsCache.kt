@@ -7,5 +7,5 @@ import io.reactivex.rxjava3.core.Single
 interface IPopularFilmsCache {
     fun getPopularFilms(): Single<List<CachedPopularFilm>>
     fun putPopularFilms(upcomingFilms: List<CachedPopularFilm>) : Completable
-    fun getPopularFilmsById(id: Int): Single<CachedPopularFilm>
+    fun getCachedPopularFilm(id: Int): Single<CachedPopularFilm?>
 }

@@ -27,9 +27,9 @@ class FilmPresenter(val film: Int) : MvpPresenter<FilmView>() {
         val actors = mutableListOf<Cast>()
         override var itemClickListener: ((IActorItemView) -> Unit)? = null
         override fun bindView(view: IActorItemView) {
-            with(actors[view.pos]){
+            with(actors[view.pos]) {
                 original_name.toLinedText().let { view.setTitle(it) }
-                getFullImagePath().let { view.loadPoster(it) }
+                view.loadPoster("https://image.tmdb.org/t/p/w500$profile_path")
             }
         }
 
@@ -43,9 +43,7 @@ class FilmPresenter(val film: Int) : MvpPresenter<FilmView>() {
         }
     }
 
-    private val actorsListPresenter by lazy {
-        ActorsListPresenter()
-    }
+    private val actorsListPresenter = ActorsListPresenter()
 
     val actorsPresenter get() = actorsListPresenter
 
@@ -59,19 +57,22 @@ class FilmPresenter(val film: Int) : MvpPresenter<FilmView>() {
         repo.loadCachedFilmInformation(film)
             .observeOn(uiScheduler)
             .subscribe({
-                if (it != null) viewState.loadFilm(it)
+                if (it != null) {
+                    viewState.loadFilm(it)
+                }
             }, {
                 viewState.showError(it.message ?: "Unknown error!")
             })
 
         repo.getCreditsMovieById(film)
             .observeOn(uiScheduler)
-            .subscribe({credits->
+            .subscribe({ credits ->
                 actorsListPresenter.setActors(credits.cast)
                 viewState.loadActors(credits)
-            }, {
-                viewState.showError(it.message ?: "Unknown error!")
+            }, { t ->
+                viewState.showError(t.message ?: "Unknown error!")
             })
+
     }
 
     fun backButton(): Boolean {

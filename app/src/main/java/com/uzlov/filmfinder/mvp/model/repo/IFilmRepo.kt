@@ -14,7 +14,7 @@ interface IFilmRepo {
     fun loadUpcomingFilms(): Single<PopularFilms>
     fun loadTopRatedFilms(): Single<PopularFilms>
     fun loadCachedFilmInformation(id: Int): Single<Film?>
-    fun getCreditsMovieById(id: Int): Single<Credits>
+    fun getCreditsMovieById(id: Int): Maybe<Credits>
 //    fun getCachedUpcomingFilm(id: Int): Single<CachedUpcomingFilm?>
 //    fun getCachedTopFilm(id: Int): Single<CachedTopFilm?>
 //    fun getCachedPopularFilm(id: Int): Single<CachedPopularFilm?>

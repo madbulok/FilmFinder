@@ -33,10 +33,10 @@ class HomePresenter : MvpPresenter<HomeView>() {
             }
         }
 
-        fun clear() = films.clear()
+//        fun clear() = films.clear()
 
         fun setFilms(list: List<Result>) {
-            clear()
+            films.clear()
             films.addAll(list)
         }
     }

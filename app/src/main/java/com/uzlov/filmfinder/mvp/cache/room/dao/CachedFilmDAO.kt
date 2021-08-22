@@ -86,6 +86,19 @@ interface CachedFilmDAO {
     fun insertIntoFavoriteAll(users: List<FilmFavoriteEntity>)
 
 
+    //credits
+    @Query("SELECT * FROM CachedCredits WHERE id=:id")
+    fun getCreditsByFilmID(id: Int) : Maybe<CachedCredits>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCredits(vararg credits: CachedCredits) : Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCredits(credits: CachedCredits) : Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCredits(credits: List<CachedCredits>) : Completable
+
 
     @Delete
     fun delete(user: FilmFavoriteEntity)

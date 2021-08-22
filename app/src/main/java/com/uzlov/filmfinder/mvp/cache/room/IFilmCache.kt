@@ -1,8 +1,10 @@
 package com.uzlov.filmfinder.mvp.cache.room
 
-import com.uzlov.filmfinder.mvp.cache.room.entity.CachedBaseEntity
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedCredits
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
-import io.reactivex.rxjava3.core.Single
 
 interface IFilmCache : IPopularFilmsCache, ITopFilmsCache, IUpcomingFilmsCache {
+    fun getCacheCredential(id: Int): Maybe<CachedCredits>
+    fun putCacheCredential(credits: CachedCredits): Completable
 }

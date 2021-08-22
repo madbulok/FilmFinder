@@ -1,10 +1,12 @@
 package com.uzlov.filmfinder.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -41,9 +43,7 @@ class FilmFragment : MvpAppCompatFragment(), FilmView, BackButtonListener {
 
     companion object {
         fun newInstance(film: Int): FilmFragment {
-            val data = Bundle().apply {
-                putInt(Constants.KEY_FILM_ENTITY, film)
-            }
+            val data = bundleOf(Constants.KEY_FILM_ENTITY to film)
             return FilmFragment().apply { arguments = data }
         }
     }
@@ -79,9 +79,9 @@ class FilmFragment : MvpAppCompatFragment(), FilmView, BackButtonListener {
                 true->{ }
                 false->{ }
             }
-            viewBinding.backButton.setOnClickListener {
-                backPressed()
-            }
+        }
+        viewBinding.backButton.setOnClickListener {
+            backPressed()
         }
     }
 

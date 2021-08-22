@@ -10,6 +10,6 @@ import moxy.viewstate.strategy.StateStrategyType
 interface FilmView : MvpView{
     fun init()
     fun loadFilm(film: Film)
-    fun loadActors(film: Credits)
+    fun loadActors(credits: Credits)
     fun showError(message: String)
 }

@@ -2,10 +2,13 @@ package com.uzlov.filmfinder.mvp.cache
 
 import com.uzlov.filmfinder.mvp.cache.room.IFilmCache
 import com.uzlov.filmfinder.mvp.cache.room.LocalDatabase
+import com.uzlov.filmfinder.mvp.cache.room.entity.CachedCredits
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedPopularFilm
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedTopFilm
 import com.uzlov.filmfinder.mvp.cache.room.entity.CachedUpcomingFilm
+import com.uzlov.filmfinder.mvp.model.entity.Credits
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -38,8 +41,20 @@ class RoomFilmCacheRepo(
         return db.filmDAO.saveTopFilms(upcomingFilms).subscribeOn(Schedulers.io())
     }
 
+    override fun putTopFilms(upcomingFilm: CachedTopFilm): Completable {
+        return db.filmDAO.saveTopFilms(upcomingFilm).subscribeOn(Schedulers.io())
+    }
+
     override fun getCachedTopFilm(id: Int): Single<CachedTopFilm?> {
         return db.filmDAO.getCachedTopFilmById(id)
+    }
+
+    override fun getCacheCredential(id: Int): Maybe<CachedCredits> {
+        return db.filmDAO.getCreditsByFilmID(id)
+    }
+
+    override fun putCacheCredential(credits: CachedCredits): Completable{
+        return db.filmDAO.insertCredits(credits)
     }
 
 
@@ -56,4 +71,5 @@ class RoomFilmCacheRepo(
     override fun getCachedPopularFilm(id: Int): Single<CachedPopularFilm?> {
         return db.filmDAO.getCachedPopularFilmById(id)
     }
+
 }

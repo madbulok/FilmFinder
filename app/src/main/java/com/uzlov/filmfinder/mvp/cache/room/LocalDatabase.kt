@@ -11,8 +11,9 @@ import com.uzlov.filmfinder.mvp.cache.room.entity.*
         CachedUpcomingFilm::class,
         CachedPopularFilm::class,
         CachedTopFilm::class,
-        RoomCachedImage::class],
-    version = 2
+        RoomCachedImage::class,
+               CachedCredits::class],
+    version = 3
 )
 abstract class LocalDatabase : RoomDatabase() {
 
